@@ -150,18 +150,43 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
+-- Table `character_db`.`skill_type`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `character_db`.`skill_type` (
+  `id` INT NOT NULL,
+  `type_name` VARCHAR(10) NOT NULL DEFAULT 'default',
+  `description_id` INT NOT NULL,
+  PRIMARY KEY (`id`, `description_id`),
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC),
+  INDEX `fk_skill_type_description1_idx` (`description_id` ASC),
+  CONSTRAINT `fk_skill_type_description1`
+    FOREIGN KEY (`description_id`)
+    REFERENCES `character_db`.`description` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
 -- Table `character_db`.`skills`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `character_db`.`skills` (
   `id` INT NOT NULL,
   `name` VARCHAR(45) NOT NULL DEFAULT 'blank_skill',
   `description_id` INT NOT NULL,
-  PRIMARY KEY (`id`, `description_id`),
+  `skill_type_id` INT NOT NULL,
+  PRIMARY KEY (`id`, `description_id`, `skill_type_id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC),
   INDEX `fk_skills_description1_idx` (`description_id` ASC),
+  INDEX `fk_skills_skill_type1_idx` (`skill_type_id` ASC),
   CONSTRAINT `fk_skills_description1`
     FOREIGN KEY (`description_id`)
     REFERENCES `character_db`.`description` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_skills_skill_type1`
+    FOREIGN KEY (`skill_type_id`)
+    REFERENCES `character_db`.`skill_type` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -213,40 +238,22 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `character_db`.`skill_type`
+-- Table `character_db`.`skill_requires_attribute`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `character_db`.`skill_type` (
-  `id` INT NOT NULL,
-  `type_name` VARCHAR(10) NOT NULL DEFAULT 'default',
-  `description_id` INT NOT NULL,
-  PRIMARY KEY (`id`, `description_id`),
-  UNIQUE INDEX `id_UNIQUE` (`id` ASC),
-  INDEX `fk_skill_type_description1_idx` (`description_id` ASC),
-  CONSTRAINT `fk_skill_type_description1`
-    FOREIGN KEY (`description_id`)
-    REFERENCES `character_db`.`description` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `character_db`.`skills_has_skill_type`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `character_db`.`skills_has_skill_type` (
+CREATE TABLE IF NOT EXISTS `character_db`.`skill_requires_attribute` (
   `skills_id` INT NOT NULL,
-  `type_id` INT NOT NULL,
-  PRIMARY KEY (`skills_id`, `type_id`),
-  INDEX `fk_skills_has_skill_type_skill_type1_idx` (`type_id` ASC),
-  INDEX `fk_skills_has_skill_type_skills1_idx` (`skills_id` ASC),
-  CONSTRAINT `fk_skills_has_skill_type_skills1`
+  `attributes_id` INT NOT NULL,
+  PRIMARY KEY (`skills_id`, `attributes_id`),
+  INDEX `fk_skills_has_attributes_attributes1_idx` (`attributes_id` ASC),
+  INDEX `fk_skills_has_attributes_skills1_idx` (`skills_id` ASC),
+  CONSTRAINT `fk_skills_has_attributes_skills1`
     FOREIGN KEY (`skills_id`)
     REFERENCES `character_db`.`skills` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_skills_has_skill_type_skill_type1`
-    FOREIGN KEY (`type_id`)
-    REFERENCES `character_db`.`skill_type` (`id`)
+  CONSTRAINT `fk_skills_has_attributes_attributes1`
+    FOREIGN KEY (`attributes_id`)
+    REFERENCES `character_db`.`attributes` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;

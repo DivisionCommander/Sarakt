@@ -1,36 +1,47 @@
 package sarakt.development.addingData;
 
+import sarakt.exceptions.InitializationException;
 import sarakt.exceptions.ModificationException;
 import sarakt.tools.Checkers;
-import sarakt.tools.Constants;
 
 public class GameClass extends ArticleToAdd {
 
-	private int id;
-	private String desc;
+	private static final String CANNOT_APPLY_ROLE = "Cannot apply role";
+	private String mainRole;
+	private String secRole;
 
-	public GameClass(String name, int id)  {
+	protected GameClass(String name) throws InitializationException {
+		super(name);
+	}
+
+	public GameClass(String name, int id) throws InitializationException {
 		super(name, id);
 	}
 
-	public void addDescription(String description) {
-		if (!Checkers.invalidText(description)) {
-			this.desc = (description);
+	public GameClass(String name, int id, String description) throws InitializationException {
+		super(name, id, description);
+	}
+
+	public String getMainRole() {
+		return mainRole;
+	}
+
+	public void setMainRole(String mainRole) throws ModificationException {
+		if (Checkers.invalidText(mainRole)) {
+			throw new ModificationException(CANNOT_APPLY_ROLE);
 		}
+		this.mainRole = mainRole;
 	}
 
-	public String getName() {
-		return this.name;
+	public String getSecondaryRole() {
+		return secRole;
 	}
 
-	public int getID() {
-		return this.id;
-	}
-
-	protected void setID(int id) throws ModificationException {
-		if (id < Constants.ZERO) {
-			throw new ModificationException("Cannot set negative ID");
+	public void setSecondaryRole(String secondaryRole) throws ModificationException {
+		if (Checkers.invalidText(secondaryRole)) {
+			throw new ModificationException(CANNOT_APPLY_ROLE);
 		}
-		this.id = id;
+		this.secRole = secondaryRole;
 	}
+
 }

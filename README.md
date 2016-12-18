@@ -1,4 +1,4 @@
 # Sarakt
-When the Dome for first time is shattered, young archaeolog found himself fighting for revenge.
+Project for simple game based of world of Sarakt. Combinate attempt to build Java Game and practice in Java development.
 
 # Droped all due general change in main conception

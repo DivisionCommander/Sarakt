@@ -1,4 +1,6 @@
 # Sarakt
+Completely deprecated
+
 Project for simple game based of world of Sarakt. Combinate attempt to build Java Game and practice in Java development.
 
 December 18th, 2016: RE-boot.
